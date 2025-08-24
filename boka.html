@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
@@ -97,6 +58,16 @@
     </div>
   </section>
 
+  <!-- Modal for Code Display (Hidden by Default) -->
+  <div id="codeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-md max-w-lg w-full text-center">
+      <h3 class="text-2xl font-bold mb-4">Din bokningskod</h3>
+      <p class="text-lg mb-4">Ta en skärmdump av denna kod och visa för personalen:</p>
+      <p id="bookingCode" class="text-xl font-semibold mb-6"></p>
+      <button onclick="closeModal()" class="bg-yellow-500 text-blue-900 px-4 py-2 rounded-full font-semibold hover:bg-yellow-400">OK</button>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="bg-blue-900 text-white py-4">
     <div class="container mx-auto text-center">
@@ -105,6 +76,19 @@
   </footer>
 
   <script>
+    const floorCodes = {
+      "Våning 1": "R7t2Qw8E5Z",
+      "Våning 2": "M4k9T1p7Q2",
+      "Våning 3": "H8s3L0u6Z5",
+      "Våning 4": "P2n7D4y1X9",
+      "Våning 5": "G6a0K3r8V1",
+      "Våning 6": "J5q2W9c4N7",
+      "Våning 7": "Z1m8F6t3B0",
+      "Våning 8": "L9e4R7v2S5",
+      "Våning 9": "C3o6Y8h1K4",
+      "Våning 10": "T0u5G9j2M7"
+    };
+
     function bookRoom() {
       const room = document.getElementById('room').value;
       const name = document.getElementById('name').value;
@@ -116,8 +100,18 @@
         return;
       }
 
+      // Store booking in localStorage
       const booking = { room, name, email, checkin };
       localStorage.setItem('booking_' + email, JSON.stringify(booking));
+
+      // Show code in modal
+      const code = floorCodes[room];
+      document.getElementById('bookingCode').textContent = code;
+      document.getElementById('codeModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('codeModal').classList.add('hidden');
       window.location.href = 'thanks.html';
     }
   </script>
