@@ -24,7 +24,7 @@
   <!-- Login Section -->
   <section id="loginSection" class="py-12">
     <div class="container mx-auto max-w-lg">
-      <h2 class="text-3xl font-bold text-center mb-8">Logga in för att beställa mat</h2>
+      <h2 class="text-3xl font-bold text-center mb-8">Logga in för att se menyn</h2>
       <div class="bg-white p-6 rounded-lg shadow-md">
         <div class="mb-4">
           <label class="block text-gray-700 font-semibold mb-2" for="loginEmail">E-post</label>
@@ -35,15 +35,15 @@
     </div>
   </section>
 
-  <!-- Order Section (Hidden until logged in) -->
+  <!-- Menu Section (Hidden until logged in) -->
   <section id="orderSection" class="py-12 hidden">
     <div class="container mx-auto max-w-lg">
-      <h2 class="text-3xl font-bold text-center mb-8">Beställ Mat</h2>
+      <h2 class="text-3xl font-bold text-center mb-8">Vår Meny</h2>
       <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h3 class="text-xl font-semibold mb-4">Kontakta oss för assistans</h3>
+        <h3 class="text-xl font-semibold mb-4">Kontakta oss för att beställa</h3>
         <p class="mb-4"><strong>Telefonnummer:</strong> +46 123 456 789</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+      <div class="bg-white p-6 rounded-lg shadow-md">
         <h3 class="text-xl font-semibold mb-4">Meny</h3>
         <ul class="list-disc list-inside">
           <li>Köttbullar med potatismos - 120 SEK</li>
@@ -52,21 +52,6 @@
           <li>Caesarsallad med kyckling - 90 SEK</li>
           <li>Chokladtårta - 50 SEK</li>
         </ul>
-      </div>
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <div class="mb-4">
-          <label class="block text-gray-700 font-semibold mb-2" for="roomNumber">Rumnummer</label>
-          <input type="text" id="roomNumber" class="w-full p-2 border rounded" required>
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 font-semibold mb-2" for="orderEmail">E-post</label>
-          <input type="email" id="orderEmail" class="w-full p-2 border rounded" readonly>
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 font-semibold mb-2" for="order">Beställning</label>
-          <textarea id="order" class="w-full p-2 border rounded" rows="4" placeholder="Skriv din beställning här..." required></textarea>
-        </div>
-        <button onclick="submitOrder()" class="w-full bg-yellow-500 text-blue-900 px-4 py-2 rounded-full font-semibold hover:bg-yellow-400">Skicka Beställning</button>
       </div>
     </div>
   </section>
@@ -94,35 +79,12 @@
 
       const today = new Date().toISOString().split('T')[0];
       if (booking.checkin !== today) {
-        alert('Matbeställning är endast tillgänglig på ditt incheckningsdatum: ' + booking.checkin);
+        alert('Menyn är endast tillgänglig på ditt incheckningsdatum: ' + booking.checkin);
         return;
       }
 
       document.getElementById('loginSection').classList.add('hidden');
       document.getElementById('orderSection').classList.remove('hidden');
-      document.getElementById('orderEmail').value = email;
-    }
-
-    function submitOrder() {
-      const roomNumber = document.getElementById('roomNumber').value;
-      const email = document.getElementById('orderEmail').value;
-      const order = document.getElementById('order').value;
-
-      if (!roomNumber || !order) {
-        alert('Vänligen fyll i alla fält.');
-        return;
-      }
-
-      const orderData = { roomNumber, email, order, timestamp: new Date().toISOString() };
-      console.log('Matbeställning:', orderData); // Log to console (extend to backend if needed)
-
-      // Play notification sound
-      const audio = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3');
-      audio.play();
-
-      alert('Din beställning har skickats!');
-      document.getElementById('roomNumber').value = '';
-      document.getElementById('order').value = '';
     }
   </script>
 </body>
