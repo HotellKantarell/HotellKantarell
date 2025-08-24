@@ -1,0 +1,83 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotell Paradis - Kontakt</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navigation -->
+  <nav class="bg-blue-900 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Hotell Paradis</h1>
+      <ul class="flex space-x-4">
+        <li><a href="index.html" class="hover:underline">Hem</a></li>
+        <li><a href="boka.html" class="hover:underline">Boka</a></li>
+        <li><a href="kontakt.html" class="hover:underline">Kontakt</a></li>
+        <li><a href="recensioner.html" class="hover:underline">Recensioner</a></li>
+        <li><a href="kop-mat.html" class="hover:underline">Beställ Mat</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Contact Info -->
+  <section class="py-12">
+    <div class="container mx-auto max-w-lg">
+      <h2 class="text-3xl font-bold text-center mb-8">Kontakta Oss</h2>
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <p class="mb-4"><strong>E-post:</strong> info@hotellparadis.se</p>
+        <p class="mb-4"><strong>Telefon:</strong> +46 123 456 789</p>
+        <p class="mb-4"><strong>Adress:</strong> Paradisgatan 1, 111 52 Stockholm, Sverige</p>
+        <p class="mb-4"><strong>Öppettider:</strong> 08:00 - 22:00</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-blue-900 text-white py-4">
+    <div class="container mx-auto text-center">
+      <p>&copy; 2025 Hotell Paradis. Alla rättigheter förbehållna.</p>
+    </div>
+  </footer>
+</body>
+</html>
