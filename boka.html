@@ -21,42 +21,52 @@
     </div>
   </nav>
 
-  <!-- Booking Form -->
-  <section class="py-12">
-    <div class="container mx-auto max-w-lg">
-      <h2 class="text-3xl font-bold text-center mb-8">Boka Ditt Rum</h2>
-      <div class="bg-white p-6 rounded-lg shadow-md">
-        <div class="mb-4">
-          <label class="block text-gray-700 font-semibold mb-2" for="room">Välj Rum</label>
-          <select id="room" class="w-full p-2 border rounded">
-            <option value="Våning 1">Våning 1</option>
-            <option value="Våning 2">Våning 2</option>
-            <option value="Våning 3">Våning 3</option>
-            <option value="Våning 4">Våning 4</option>
-            <option value="Våning 5">Våning 5</option>
-            <option value="Våning 6">Våning 6</option>
-            <option value="Våning 7">Våning 7</option>
-            <option value="Våning 8">Våning 8</option>
-            <option value="Våning 9">Våning 9</option>
-            <option value="Våning 10">Våning 10</option>
-          </select>
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 font-semibold mb-2" for="name">Namn</label>
-          <input type="text" id="name" class="w-full p-2 border rounded" required>
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 font-semibold mb-2" for="email">E-post</label>
-          <input type="email" id="email" class="w-full p-2 border rounded" required>
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-700 font-semibold mb-2" for="checkin">Incheckningsdatum</label>
-          <input type="date" id="checkin" class="w-full p-2 border rounded" required>
-        </div>
-        <button onclick="bookRoom()" class="w-full bg-yellow-500 text-blue-900 px-4 py-2 rounded-full font-semibold hover:bg-yellow-400">Boka Nu</button>
+<!-- Booking Form -->
+<section class="py-12">
+  <div class="container mx-auto max-w-lg">
+    <h2 class="text-3xl font-bold text-center mb-8">Boka Ditt Rum</h2>
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2" for="room">Välj Rum</label>
+        <select id="room" class="w-full p-2 border rounded">
+          <option value="Våning 1">Våning 1</option>
+          <option value="Våning 2">Våning 2</option>
+          <option value="Våning 3">Våning 3</option>
+          <option value="Våning 4">Våning 4</option>
+          <option value="Våning 5">Våning 5</option>
+          <option value="Våning 6">Våning 6</option>
+          <option value="Våning 7">Våning 7</option>
+          <option value="Våning 8">Våning 8</option>
+          <option value="Våning 9">Våning 9</option>
+          <option value="Våning 10">Våning 10</option>
+        </select>
       </div>
+
+      <!-- Ny dropdown -->
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2" for="type">Välj Typ</label>
+        <select id="type" class="w-full p-2 border rounded">
+          <option value="Vanlig">Vanlig (+0 kr)</option>
+          <option value="Lyx">Lyx (+10 kr)</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2" for="name">Namn</label>
+        <input type="text" id="name" class="w-full p-2 border rounded" required>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2" for="email">E-post</label>
+        <input type="email" id="email" class="w-full p-2 border rounded" required>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2" for="checkin">Incheckningsdatum</label>
+        <input type="date" id="checkin" class="w-full p-2 border rounded" required>
+      </div>
+      <button onclick="bookRoom()" class="w-full bg-yellow-500 text-blue-900 px-4 py-2 rounded-full font-semibold hover:bg-yellow-400">Boka Nu</button>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Modal for Code Display (Hidden by Default) -->
   <div id="codeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
