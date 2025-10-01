@@ -1,92 +1,31 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
-<html lang="sv">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hotell Kantarell - Recensioner</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 font-sans">
-  <!-- Navigation -->
-  <nav class="bg-blue-900 text-white p-4">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Hotell Kantarell</h1>
-      <ul class="flex space-x-4">
-        <li><a href="index.html" class="hover:underline">Hem</a></li>
-        <li><a href="boka.html" class="hover:underline">Boka</a></li>
-        <li><a href="kontakt.html" class="hover:underline">Kontakt</a></li>
-        <li><a href="recensioner.html" class="hover:underline">Recensioner</a></li>
-        <li><a href="kop-mat.html" class="hover:underline">Beställ Mat</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- Reviews -->
-  <section class="py-12">
-    <div class="container mx-auto">
-      <h2 class="text-3xl font-bold text-center mb-8">Vad gäster säger</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Reviews -->
+<section class="py-12">
+  <div class="container mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-8">Vad gäster säger</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="reviews-container">
+      <!-- Exempelrecension -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <p class="mb-4">Jag har otroligt nöjd att bli kallad för snäll och att dom även skriver snälla saker annars vad det rätt så bra men att dom lurar inte på massor av abonnemang.</p>
+        <div class="flex items-center space-x-4">
+          <button class="reaction-btn flex items-center text-gray-600 hover:text-blue-600">
+            <span class="mr-1">👍</span>
+            <span class="reaction-count">5</span>
+          </button>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer class="bg-blue-900 text-white py-4">
-    <div class="container mx-auto text-center">
-      <p>&copy; 2025 Hotell Kantarell</p>
-    </div>
-  </footer>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/68aabfb7f07f381927fea345/1j3dfpp3l';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
+<script>
+// Reactions-funktion
+document.addEventListener('DOMContentLoaded', () => {
+  const buttons = document.querySelectorAll('.reaction-btn');
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const countSpan = button.querySelector('.reaction-count');
+      countSpan.textContent = parseInt(countSpan.textContent) + 1;
+    });
+  });
+});
 </script>
-<!--End of Tawk.to Script-->
-</body>
-</html>
